@@ -7,6 +7,7 @@
     "build": "tsc",
     "mcp": "node dist/src/mcp/server.js",
     "smoke": "node scripts/test-mcp.mjs",
+    "smoke:http": "node scripts/test-http-mcp.mjs",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [],

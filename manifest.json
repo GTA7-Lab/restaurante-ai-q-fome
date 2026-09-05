@@ -9,7 +9,12 @@
     "consultar_funcionarios"
   ],
   "mcp": {
-    "transport": "stdio",
+    "transport": "http",
+    "endpoint": "/api/mcp",
+    "transports": {
+      "http": "POST /api/mcp (streamable http, stateless)",
+      "stdio": "node dist/src/mcp/server.js"
+    },
     "tools": [
       {
         "name": "get_menu",
