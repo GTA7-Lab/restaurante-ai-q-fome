@@ -100,6 +100,12 @@ cópia, que volta ao original no próximo cold start.
   Enquanto as duas não forem destravadas, não dá para confirmar sequer se o build
   passou — o SSO responde antes da aplicação.
 - Verificação de deploy é por `curl` na URL, já que o conector não lê deployments.
+- Criado um terceiro projeto, **`clinica21/ai-q-fome`** (`prj_RL9BKtwLG7uOJEPOLJvoMrA8BzAB`),
+  desta vez ligado ao Git — desta vez o `create_git_project` não reclamou de GitHub
+  App faltando, então o app parece instalado. O link não pôde ser verificado (mesmo
+  404 de leitura), e projeto ligado ao Git só publica no push seguinte: este commit
+  serve de teste. Se auto-deployar, esse vira o projeto oficial e some a dependência
+  do conector (que só cria projeto, não atualiza).
 - `vercel.json` define `outputDirectory: public`. A causa provável da falha de build
   anterior era não existir diretório de saída (as funções em `api/` a Vercel compila
   sozinha, então não há build command).
