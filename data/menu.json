@@ -1,0 +1,39 @@
+{
+  "restaurant": {
+    "id": "restaurante-ai-q-fome",
+    "name": "Ai Q FOME",
+    "description": "Restaurante local da cidade GTA7 Lab, onde moradores compram refeições, combinações e bebidas.",
+    "openingHours": {
+      "segunda": "almoco_e_jantar",
+      "terca": "almoco_e_jantar",
+      "quarta": "almoco_e_jantar",
+      "quinta": "almoco_e_jantar",
+      "sexta": "jantar",
+      "sabado": "jantar",
+      "domingo": "delivery"
+    }
+  },
+  "menu": [
+    { "id": "prato-principal-1", "name": "Prato Principal 1", "category": "prato_principal", "price": 100.0 },
+    { "id": "prato-principal-2", "name": "Prato Principal 2", "category": "prato_principal", "price": 90.0 },
+    { "id": "prato-principal-3", "name": "Prato Principal 3", "category": "prato_principal", "price": 80.0 },
+    { "id": "entrada-1", "name": "Entrada 1", "category": "entrada", "price": 50.0 },
+    { "id": "entrada-2", "name": "Entrada 2", "category": "entrada", "price": 40.0 },
+    { "id": "entrada-3", "name": "Entrada 3", "category": "entrada", "price": 30.0 },
+    { "id": "sobremesa-1", "name": "Sobremesa 1", "category": "sobremesa", "price": 30.0 },
+    { "id": "sobremesa-2", "name": "Sobremesa 2", "category": "sobremesa", "price": 20.0 },
+    { "id": "sobremesa-3", "name": "Sobremesa 3", "category": "sobremesa", "price": 15.0 },
+    { "id": "bebida-1", "name": "Bebida 1", "category": "bebida", "price": 10.0 },
+    { "id": "bebida-2", "name": "Bebida 2", "category": "bebida", "price": 8.0 },
+    { "id": "bebida-3", "name": "Bebida 3", "category": "bebida", "price": 6.0 }
+  ],
+  "employees": [
+    { "id": "func-1", "name": "Carlos Souza", "role": "garcom", "salaryPerShift": 60.0 },
+    { "id": "func-2", "name": "Marina Lopes", "role": "cozinheiro", "salaryPerShift": 90.0 }
+  ],
+  "tables": [
+    { "id": "mesa-1", "capacity": 4 },
+    { "id": "mesa-2", "capacity": 2 },
+    { "id": "mesa-3", "capacity": 6 }
+  ]
+}

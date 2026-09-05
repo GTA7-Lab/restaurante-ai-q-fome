@@ -1,0 +1,28 @@
+{
+  "id": "restaurante-ai-q-fome",
+  "name": "Restaurante Ai Q FOME",
+  "description": "Restaurante local da cidade GTA7 Lab onde moradores compram refeições, combinações e bebidas por mesa ou delivery.",
+  "capabilities": [
+    "consultar_cardapio",
+    "registrar_pedido",
+    "consultar_pedidos",
+    "consultar_funcionarios"
+  ],
+  "mcp": {
+    "transport": "stdio",
+    "tools": [
+      {
+        "name": "get_menu",
+        "description": "Lista o cardápio, opcionalmente filtrado por categoria (prato_principal, entrada, sobremesa, bebida)."
+      },
+      {
+        "name": "place_order",
+        "description": "Registra um pedido para uma mesa e calcula o valor total unificado."
+      }
+    ]
+  },
+  "http": {
+    "menu": "GET /api/menu?category=",
+    "orders": "GET /api/orders, POST /api/orders"
+  }
+}

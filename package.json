@@ -1,0 +1,23 @@
+{
+  "name": "gta7-lab-restaurante",
+  "version": "1.0.0",
+  "description": "Entidade Restaurante Ai Q FOME para a cidade digital GTA7 Lab",
+  "main": "dist/src/mcp/server.js",
+  "scripts": {
+    "build": "tsc",
+    "mcp": "node dist/src/mcp/server.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.1",
+    "typescript": "^7.0.2"
+  }
+}
