@@ -1,8 +1,9 @@
 # Restaurante Ai Q FOME — GTA7 Lab
 
-Esta pasta (`entities/restaurante-ai-q-fome/`) é uma entidade dentro do monorepo
-`GTA7-Lab/gta7-lab`, que reúne a cidade digital GTA7 Lab e todas as suas
-entidades (cada uma em sua própria pasta dentro de `entities/`).
+Repo próprio (`GTA7-Lab/restaurante-ai-q-fome`) de uma entidade da cidade digital
+GTA7 Lab. A cidade fica em `GTA7-Lab/gta7-lab` e o Core Orchestrator em
+`GTA7-Lab/gta7-lab-core`; o Core alcança esta entidade pelas MCP tools, não por
+caminho no repo.
 
 ## Objetivo
 Entidade "restaurante" da cidade digital GTA7 Lab. Moradores compram refeições,
@@ -54,7 +55,8 @@ de funcionários (dados de funcionários existem no JSON só para consulta futur
 
 ## Status atual
 - Projeto criado, build (`npm run build`) e MCP server testados localmente.
-- Publicado em `github.com/GTA7-Lab/gta7-lab`, na pasta `entities/restaurante-ai-q-fome/`.
+- Publicado em `github.com/GTA7-Lab/restaurante-ai-q-fome` (repo próprio, saiu do
+  monorepo da cidade em 05/09/2026).
 - Projeto na Vercel (`clinica21/gta7-lab-restaurante`) criado via deploy direto de
   arquivos (sem vínculo Git — o GitHub App da Vercel não está instalado no repo).
   Último deploy falhou no build; causa ainda não diagnosticada (conector MCP da

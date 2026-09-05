@@ -44,11 +44,13 @@ https://vercel.com/docs/agent-resources/vercel-mcp#claude-code
 
 ## Deploy
 
-Este projeto vive na pasta `entities/restaurante-ai-q-fome/` do monorepo
-`GTA7-Lab/gta7-lab` (cada entidade da cidade GTA7 Lab tem sua própria pasta em
-`entities/`). O projeto na Vercel deve ser criado com Root Directory =
-`entities/restaurante-ai-q-fome`, com deploy automático a cada push. As rotas em
-`api/` são publicadas como funções serverless.
+Este projeto tem repositório próprio ([`GTA7-Lab/restaurante-ai-q-fome`](https://github.com/GTA7-Lab/restaurante-ai-q-fome)),
+como a Sorveteria Polar e o Core. O projeto na Vercel aponta para a raiz deste repo
+(sem Root Directory), com deploy a cada push. As rotas em `api/` são publicadas como
+funções serverless.
+
+A cidade fica em [`GTA7-Lab/gta7-lab`](https://github.com/GTA7-Lab/gta7-lab) e o Core
+Orchestrator em [`GTA7-Lab/gta7-lab-core`](https://github.com/GTA7-Lab/gta7-lab-core).
 
 ## Manifesto da entidade
 
