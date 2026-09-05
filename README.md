@@ -44,11 +44,11 @@ https://vercel.com/docs/agent-resources/vercel-mcp#claude-code
 
 ## Deploy
 
-Este projeto vive na pasta `restaurante-ai-q-fome/` do monorepo
-`ericmgomes/gta7-lab` (cada entidade da cidade GTA7 Lab tem sua própria pasta).
-O projeto na Vercel deve ser criado com Root Directory = `restaurante-ai-q-fome`,
-com deploy automático a cada push. As rotas em `api/` são publicadas como funções
-serverless.
+Este projeto vive na pasta `entities/restaurante-ai-q-fome/` do monorepo
+`GTA7-Lab/gta7-lab` (cada entidade da cidade GTA7 Lab tem sua própria pasta em
+`entities/`). O projeto na Vercel deve ser criado com Root Directory =
+`entities/restaurante-ai-q-fome`, com deploy automático a cada push. As rotas em
+`api/` são publicadas como funções serverless.
 
 ## Manifesto da entidade
 

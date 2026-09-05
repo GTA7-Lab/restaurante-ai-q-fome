@@ -1,8 +1,8 @@
 # Restaurante Ai Q FOME — GTA7 Lab
 
-Esta pasta (`restaurante-ai-q-fome/`) é uma entidade dentro do monorepo
-`ericmgomes/gta7-lab`, que reúne a cidade digital GTA7 Lab e todas as suas
-entidades (cada uma em sua própria pasta na raiz do repositório).
+Esta pasta (`entities/restaurante-ai-q-fome/`) é uma entidade dentro do monorepo
+`GTA7-Lab/gta7-lab`, que reúne a cidade digital GTA7 Lab e todas as suas
+entidades (cada uma em sua própria pasta dentro de `entities/`).
 
 ## Objetivo
 Entidade "restaurante" da cidade digital GTA7 Lab. Moradores compram refeições,
@@ -54,10 +54,13 @@ de funcionários (dados de funcionários existem no JSON só para consulta futur
 
 ## Status atual
 - Projeto criado, build (`npm run build`) e MCP server testados localmente.
-- Publicado em `github.com/ericmgomes/gta7-lab`, na pasta `restaurante-ai-q-fome/`.
-- Projeto na Vercel: pendente (aguardando teamId/conta conectada via MCP da Vercel;
-  ao criar, usar `rootDirectory: "restaurante-ai-q-fome"`).
+- Publicado em `github.com/GTA7-Lab/gta7-lab`, na pasta `entities/restaurante-ai-q-fome/`.
+- Projeto na Vercel (`clinica21/gta7-lab-restaurante`) criado via deploy direto de
+  arquivos (sem vínculo Git — o GitHub App da Vercel não está instalado no repo).
+  Último deploy falhou no build; causa ainda não diagnosticada (conector MCP da
+  Vercel não tem permissão de leitura de logs/deployments nesse time — só escrita).
 
 ## Próxima tarefa
-Integrar com o Core Orchestrator usando `manifest.json` e validar as tools MCP
-a partir de um client externo.
+Diagnosticar a falha de build na Vercel (ver Status atual) e, depois, integrar
+com o Core Orchestrator usando `manifest.json`, validando as tools MCP a partir
+de um client externo.
