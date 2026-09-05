@@ -23,7 +23,10 @@ Pedidos (`Order`) são gerados em memória via `src/repository.ts` (sem persist�
 entre reinícios nesta v1 — ver Limitações).
 
 ## MCP tools
-Servidor MCP (stdio) em `src/mcp/server.ts`, rodado com `npm run mcp` (após `npm run build`).
+As tools são definidas uma vez em `src/mcp/create-server.ts` e servidas por dois
+transportes:
+- **stdio** — `src/mcp/server.ts`, via `npm run mcp` (após `npm run build`).
+- **http** — `api/mcp.ts`, em `POST /api/mcp` (streamable http, stateless).
 
 - `get_menu(category?)` — lista o cardápio, opcionalmente filtrado por categoria.
 - `place_order(tableId, people, items[])` — registra pedido de uma mesa e calcula o total unificado.
@@ -58,18 +61,22 @@ de funcionários (dados de funcionários existem no JSON só para consulta futur
   chama `get_menu` e `place_order` (total unificado por mesa confere).
 - Publicado em `github.com/GTA7-Lab/restaurante-ai-q-fome` (repo próprio, saiu do
   monorepo da cidade em 05/09/2026).
-- Deploy na Vercel **bloqueado por permissão**, não por código. O projeto
-  `clinica21/gta7-lab-restaurante` existe, mas o conector MCP da Vercel não
-  alcança: `list_projects` volta vazio e `deploy_to_vercel` dá 403 tanto em
-  production quanto em preview ("You don't have permission to create a ...
-  Deployment for this Vercel project"). O erro nomeia o projeto, então ele é
-  resolvível — o que aponta para a autorização do conector estar limitada a um
-  conjunto de projetos que não inclui este. Destrava concedendo acesso a todos os
-  projetos (ou a este) na autorização do conector Vercel.
+- Deployado em produção no projeto **`clinica21/restaurante-ai-q-fome`**:
+  https://restaurante-ai-q-fome-clinica21.vercel.app
+- **Falta desativar o Vercel Authentication** desse projeto (Settings → Deployment
+  Protection). Enquanto estiver ligado, qualquer request anônimo leva 302 para o
+  SSO da Vercel, então o Core não alcança o `/api/mcp` — e não dá para confirmar
+  se o build passou.
+- O projeto antigo `clinica21/gta7-lab-restaurante` ficou órfão: o conector MCP
+  não tem permissão nele (403 em production e preview, `list_projects` vazio), por
+  isso o deploy foi para um projeto novo com o nome do repo. Dá para apagar o
+  antigo.
+- O conector MCP da Vercel escreve mas não lê neste time: `get_deployment` e
+  `list_projects` falham, então o jeito de verificar o deploy é `curl` na URL.
 - `vercel.json` define `outputDirectory: public`. A causa provável da falha de build
   anterior era não existir diretório de saída (as funções em `api/` a Vercel compila
   sozinha, então não há build command).
 
 ## Próxima tarefa
-Destravar a permissão do conector Vercel (ver Status atual) e refazer o deploy.
-Depois, integrar com o Core Orchestrator usando `manifest.json`.
+Desativar o Vercel Authentication do projeto, confirmar `/api/mcp` respondendo em
+produção e registrar a entidade no Core com `endpoint` apontando para essa URL.
