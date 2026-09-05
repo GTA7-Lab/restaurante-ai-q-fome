@@ -43,6 +43,12 @@
     <li><code>get_menu(category?)</code></li>
     <li><code>place_order(tableId, people, items[])</code></li>
   </ul>
+  <p>Alterar o cardápio exige a palavra mágica no parâmetro <code>magicWord</code>:</p>
+  <ul>
+    <li><code>create_menu_item(magicWord, name, category, price)</code></li>
+    <li><code>update_menu_item(magicWord, id, name?, category?, price?)</code></li>
+    <li><code>delete_menu_item(magicWord, id)</code></li>
+  </ul>
 
 <script>
 const CAT = {

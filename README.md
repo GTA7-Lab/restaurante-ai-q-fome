@@ -24,15 +24,45 @@ POST /api/orders   { "tableId": "mesa-1", "people": 2, "items": [{ "itemId": "pr
 npm run mcp
 ```
 
-Isso inicia um servidor MCP via stdio com duas tools:
+Isso inicia um servidor MCP via stdio. As mesmas tools também são servidas por
+HTTP em `POST /api/mcp`.
+
+Abertas a qualquer um:
 
 - **`get_menu`** — lista o cardápio, com filtro opcional por `category`
   (`prato_principal`, `entrada`, `sobremesa`, `bebida`).
 - **`place_order`** — registra um pedido para uma mesa (`tableId`, `people`, `items[]`)
   e retorna o pedido com o total calculado.
 
+Protegidas pela palavra mágica:
+
+- **`create_menu_item`** (`magicWord`, `name`, `category`, `price`)
+- **`update_menu_item`** (`magicWord`, `id`, `name?`, `category?`, `price?`)
+- **`delete_menu_item`** (`magicWord`, `id`)
+
 Para usar no Claude Desktop/Code, aponte um servidor MCP para
-`node dist/src/mcp/server.js` (rode `npm run build` antes).
+`node dist/src/mcp/server.js` (rode `npm run build` antes), ou use o `.mcp.json`
+já incluído no repo.
+
+### Palavra mágica
+
+Alterar o cardápio exige informar a palavra mágica no parâmetro `magicWord`.
+Consultar o cardápio e fazer pedidos **não** exige — senão a cidade não
+conseguiria comer aqui.
+
+O valor vem da variável de ambiente `MAGIC_WORD`; sem ela, o padrão é
+`por favor`. A comparação ignora maiúsculas, acentos e espaços nas pontas.
+
+Como o padrão está num repositório público, ele existe só para o projeto
+funcionar recém-clonado. Para proteger de verdade, defina `MAGIC_WORD` nas
+variáveis de ambiente do projeto na Vercel.
+
+### Testes
+
+```bash
+npm run smoke        # MCP por stdio, incluindo a palavra mágica
+npm run smoke:http   # a mesma função de /api/mcp, num servidor local
+```
 
 ## MCP na Vercel
 

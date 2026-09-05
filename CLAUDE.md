@@ -28,8 +28,14 @@ transportes:
 - **stdio** — `src/mcp/server.ts`, via `npm run mcp` (após `npm run build`).
 - **http** — `api/mcp.ts`, em `POST /api/mcp` (streamable http, stateless).
 
+Abertas:
 - `get_menu(category?)` — lista o cardápio, opcionalmente filtrado por categoria.
 - `place_order(tableId, people, items[])` — registra pedido de uma mesa e calcula o total unificado.
+
+Exigem a palavra mágica (parâmetro `magicWord`):
+- `create_menu_item(magicWord, name, category, price)` — id gerado a partir do nome.
+- `update_menu_item(magicWord, id, name?, category?, price?)`
+- `delete_menu_item(magicWord, id)`
 
 Referência sobre MCP + Vercel (conectar Claude Code ao Vercel MCP para gerenciar
 deploys durante o desenvolvimento): https://vercel.com/docs/agent-resources/vercel-mcp#claude-code
@@ -43,6 +49,15 @@ deploys durante o desenvolvimento): https://vercel.com/docs/agent-resources/verc
   (`GET /api/menu?category=`, `GET/POST /api/orders`).
 - `manifest.json` — manifesto da entidade para o Core Orchestrator.
 
+## Palavra mágica (`src/magic-word.ts`)
+Só as escritas no cardápio são protegidas. Leitura e pedidos ficam abertos — se
+`get_menu` exigisse a palavra, a cidade não conseguiria consultar o cardápio nem
+comer aqui, e a entidade perderia a função.
+
+Valor vem de `MAGIC_WORD`; o padrão é `por favor`. Comparação ignora maiúsculas,
+acentos e espaços nas pontas. Como o padrão está num repo público, ele serve para
+o projeto rodar recém-clonado — protegendo algo real, defina a env var na Vercel.
+
 ## Decisões relevantes
 - Sem banco de dados: cardápio/funcionários/mesas vêm de `data/menu.json` (import
   estático com `resolveJsonModule`, para funcionar tanto local quanto no bundle da Vercel).
@@ -53,8 +68,14 @@ deploys durante o desenvolvimento): https://vercel.com/docs/agent-resources/verc
   TypeScript 7, por isso o campo foi deixado sem valor explícito (default atual).
 
 ## Limitações da v1 (intencionais)
-Sem autenticação, pagamentos reais, banco externo, Docker, ou contratação/pagamento
-de funcionários (dados de funcionários existem no JSON só para consulta futura).
+Sem pagamentos reais, banco externo, Docker, ou contratação/pagamento de
+funcionários (dados de funcionários existem no JSON só para consulta futura).
+
+A palavra mágica é o único controle de acesso, e é um segredo compartilhado em
+texto puro — serve para a demo da cidade, não para proteger dado sensível. As
+alterações do CRUD, como os pedidos, vivem só na memória do processo: o
+`data/menu.json` não é reescrito e cada instância serverless tem sua própria
+cópia, que volta ao original no próximo cold start.
 
 ## Status atual
 - Build (`npm run build`) e MCP server verificados: `npm run smoke` lista as tools e

@@ -6,7 +6,8 @@
     "consultar_cardapio",
     "registrar_pedido",
     "consultar_pedidos",
-    "consultar_funcionarios"
+    "consultar_funcionarios",
+    "gerenciar_cardapio"
   ],
   "mcp": {
     "transport": "http",
@@ -23,11 +24,34 @@
       {
         "name": "place_order",
         "description": "Registra um pedido para uma mesa e calcula o valor total unificado."
+      },
+      {
+        "name": "create_menu_item",
+        "description": "Adiciona um item ao cardápio. Exige a palavra mágica.",
+        "requiresMagicWord": true
+      },
+      {
+        "name": "update_menu_item",
+        "description": "Altera nome, categoria ou preço de um item do cardápio. Exige a palavra mágica.",
+        "requiresMagicWord": true
+      },
+      {
+        "name": "delete_menu_item",
+        "description": "Remove um item do cardápio. Exige a palavra mágica.",
+        "requiresMagicWord": true
       }
     ]
   },
   "http": {
+    "mcp": "POST /api/mcp",
     "menu": "GET /api/menu?category=",
     "orders": "GET /api/orders, POST /api/orders"
+  },
+  "auth": {
+    "magicWord": {
+      "applies_to": ["create_menu_item", "update_menu_item", "delete_menu_item"],
+      "param": "magicWord",
+      "note": "Leitura do cardápio e pedidos não exigem palavra mágica. O valor vem da env MAGIC_WORD."
+    }
   }
 }
