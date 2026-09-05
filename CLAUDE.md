@@ -82,30 +82,21 @@ cópia, que volta ao original no próximo cold start.
   chama `get_menu` e `place_order` (total unificado por mesa confere).
 - Publicado em `github.com/GTA7-Lab/restaurante-ai-q-fome` (repo próprio, saiu do
   monorepo da cidade em 05/09/2026).
-- Existe um deploy em `clinica21/restaurante-ai-q-fome`
-  (https://restaurante-ai-q-fome-clinica21.vercel.app), mas ele está **atrasado**:
-  saiu antes da palavra mágica e do CRUD.
-- **Duas travas de permissão do conector MCP da Vercel**, ambas fora do código:
-  1. O conector só consegue **criar** projeto novo. Em projeto que já existe, todo
-     deploy volta 403 ("You don't have permission to create a Production
-     Deployment") — foi assim no `gta7-lab-restaurante` e passou a ser assim no
-     `restaurante-ai-q-fome` depois que ele existiu. Leitura também falha
-     (`list_projects` vazio, `get_deployment`/`get_project` 404). Tem cara de
-     autorização limitada a um conjunto de projetos.
-  2. O **Vercel Authentication** está ligado no projeto: request anônimo leva 302
-     para o SSO, então nem o Core nem `curl` alcançam `/api/mcp`. Desativar em
-     Settings → Deployment Protection (a tool `update_project_deployment_protection`
-     não resolve: dá 404, mesma falta de leitura do item 1).
-
-  Enquanto as duas não forem destravadas, não dá para confirmar sequer se o build
-  passou — o SSO responde antes da aplicação.
-- Verificação de deploy é por `curl` na URL, já que o conector não lê deployments.
-- Criado um terceiro projeto, **`clinica21/ai-q-fome`** (`prj_RL9BKtwLG7uOJEPOLJvoMrA8BzAB`),
-  desta vez ligado ao Git — desta vez o `create_git_project` não reclamou de GitHub
-  App faltando, então o app parece instalado. O link não pôde ser verificado (mesmo
-  404 de leitura), e projeto ligado ao Git só publica no push seguinte: este commit
-  serve de teste. Se auto-deployar, esse vira o projeto oficial e some a dependência
-  do conector (que só cria projeto, não atualiza).
+- Projeto oficial: **`clinica21/ai-q-fome`** (`prj_RL9BKtwLG7uOJEPOLJvoMrA8BzAB`),
+  ligado a este repo e com **auto-deploy a cada push confirmado funcionando**.
+  URL: https://ai-q-fome-clinica21.vercel.app
+- **Falta desativar o Vercel Authentication** nesse projeto (Settings → Deployment
+  Protection). Request anônimo leva 302 para o SSO, então nem o Core nem `curl`
+  alcançam `/api/mcp` — e nem dá para confirmar se o build passou, porque o SSO
+  responde antes da aplicação. `update_project_deployment_protection` não resolve:
+  dá 404 mesmo passando o project id real.
+- **A env `MAGIC_WORD` está no projeto errado** (`restaurante-ai-q-fome`). Precisa
+  ser criada em `ai-q-fome`, senão a palavra mágica em produção cai no padrão.
+- O conector MCP da Vercel neste time **só cria projeto**: não lê (`list_projects`
+  vazio, `get_project`/`get_deployment` 404) nem atualiza projeto existente (403 em
+  todo deploy). Por isso o caminho passou a ser Git, não `deploy_to_vercel`.
+- Projetos antigos `gta7-lab-restaurante` e `restaurante-ai-q-fome` ficaram
+  obsoletos — dá para apagar.
 - `vercel.json` define `outputDirectory: public`. A causa provável da falha de build
   anterior era não existir diretório de saída (as funções em `api/` a Vercel compila
   sozinha, então não há build command).
