@@ -54,15 +54,22 @@ Sem autenticação, pagamentos reais, banco externo, Docker, ou contratação/pa
 de funcionários (dados de funcionários existem no JSON só para consulta futura).
 
 ## Status atual
-- Projeto criado, build (`npm run build`) e MCP server testados localmente.
+- Build (`npm run build`) e MCP server verificados: `npm run smoke` lista as tools e
+  chama `get_menu` e `place_order` (total unificado por mesa confere).
 - Publicado em `github.com/GTA7-Lab/restaurante-ai-q-fome` (repo próprio, saiu do
   monorepo da cidade em 05/09/2026).
-- Projeto na Vercel (`clinica21/gta7-lab-restaurante`) criado via deploy direto de
-  arquivos (sem vínculo Git — o GitHub App da Vercel não está instalado no repo).
-  Último deploy falhou no build; causa ainda não diagnosticada (conector MCP da
-  Vercel não tem permissão de leitura de logs/deployments nesse time — só escrita).
+- Deploy na Vercel **bloqueado por permissão**, não por código. O projeto
+  `clinica21/gta7-lab-restaurante` existe, mas o conector MCP da Vercel não
+  alcança: `list_projects` volta vazio e `deploy_to_vercel` dá 403 tanto em
+  production quanto em preview ("You don't have permission to create a ...
+  Deployment for this Vercel project"). O erro nomeia o projeto, então ele é
+  resolvível — o que aponta para a autorização do conector estar limitada a um
+  conjunto de projetos que não inclui este. Destrava concedendo acesso a todos os
+  projetos (ou a este) na autorização do conector Vercel.
+- `vercel.json` define `outputDirectory: public`. A causa provável da falha de build
+  anterior era não existir diretório de saída (as funções em `api/` a Vercel compila
+  sozinha, então não há build command).
 
 ## Próxima tarefa
-Diagnosticar a falha de build na Vercel (ver Status atual) e, depois, integrar
-com o Core Orchestrator usando `manifest.json`, validando as tools MCP a partir
-de um client externo.
+Destravar a permissão do conector Vercel (ver Status atual) e refazer o deploy.
+Depois, integrar com o Core Orchestrator usando `manifest.json`.
