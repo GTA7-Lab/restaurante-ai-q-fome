@@ -82,18 +82,24 @@ cópia, que volta ao original no próximo cold start.
   chama `get_menu` e `place_order` (total unificado por mesa confere).
 - Publicado em `github.com/GTA7-Lab/restaurante-ai-q-fome` (repo próprio, saiu do
   monorepo da cidade em 05/09/2026).
-- Deployado em produção no projeto **`clinica21/restaurante-ai-q-fome`**:
-  https://restaurante-ai-q-fome-clinica21.vercel.app
-- **Falta desativar o Vercel Authentication** desse projeto (Settings → Deployment
-  Protection). Enquanto estiver ligado, qualquer request anônimo leva 302 para o
-  SSO da Vercel, então o Core não alcança o `/api/mcp` — e não dá para confirmar
-  se o build passou.
-- O projeto antigo `clinica21/gta7-lab-restaurante` ficou órfão: o conector MCP
-  não tem permissão nele (403 em production e preview, `list_projects` vazio), por
-  isso o deploy foi para um projeto novo com o nome do repo. Dá para apagar o
-  antigo.
-- O conector MCP da Vercel escreve mas não lê neste time: `get_deployment` e
-  `list_projects` falham, então o jeito de verificar o deploy é `curl` na URL.
+- Existe um deploy em `clinica21/restaurante-ai-q-fome`
+  (https://restaurante-ai-q-fome-clinica21.vercel.app), mas ele está **atrasado**:
+  saiu antes da palavra mágica e do CRUD.
+- **Duas travas de permissão do conector MCP da Vercel**, ambas fora do código:
+  1. O conector só consegue **criar** projeto novo. Em projeto que já existe, todo
+     deploy volta 403 ("You don't have permission to create a Production
+     Deployment") — foi assim no `gta7-lab-restaurante` e passou a ser assim no
+     `restaurante-ai-q-fome` depois que ele existiu. Leitura também falha
+     (`list_projects` vazio, `get_deployment`/`get_project` 404). Tem cara de
+     autorização limitada a um conjunto de projetos.
+  2. O **Vercel Authentication** está ligado no projeto: request anônimo leva 302
+     para o SSO, então nem o Core nem `curl` alcançam `/api/mcp`. Desativar em
+     Settings → Deployment Protection (a tool `update_project_deployment_protection`
+     não resolve: dá 404, mesma falta de leitura do item 1).
+
+  Enquanto as duas não forem destravadas, não dá para confirmar sequer se o build
+  passou — o SSO responde antes da aplicação.
+- Verificação de deploy é por `curl` na URL, já que o conector não lê deployments.
 - `vercel.json` define `outputDirectory: public`. A causa provável da falha de build
   anterior era não existir diretório de saída (as funções em `api/` a Vercel compila
   sozinha, então não há build command).
