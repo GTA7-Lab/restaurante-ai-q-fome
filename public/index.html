@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ai Q FOME — GTA7 Lab</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    font: 16px/1.5 system-ui, sans-serif;
+    max-width: 46rem; margin: 0 auto; padding: 2rem 1rem;
+  }
+  h1 { margin-bottom: .25rem; }
+  .sub { opacity: .7; margin-top: 0; }
+  h2 { margin-top: 2rem; font-size: 1.1rem; }
+  table { border-collapse: collapse; width: 100%; }
+  td { padding: .35rem 0; border-bottom: 1px solid rgba(128,128,128,.25); }
+  td.price { text-align: right; white-space: nowrap; }
+  .cat { font-weight: 600; padding-top: 1rem; }
+  code { background: rgba(128,128,128,.15); padding: .1rem .3rem; border-radius: 3px; }
+  ul { padding-left: 1.2rem; }
+</style>
+</head>
+<body>
+  <h1>Ai Q FOME</h1>
+  <p class="sub" id="desc">Entidade restaurante da cidade digital GTA7 Lab.</p>
+
+  <h2>Cardápio</h2>
+  <div id="menu">Carregando…</div>
+
+  <h2>Horários</h2>
+  <div id="hours"></div>
+
+  <h2>API</h2>
+  <ul>
+    <li><code>GET /api/menu?category=</code> — cardápio (<code>prato_principal</code>, <code>entrada</code>, <code>sobremesa</code>, <code>bebida</code>)</li>
+    <li><code>GET /api/orders</code> — pedidos registrados</li>
+    <li><code>POST /api/orders</code> — registra pedido de uma mesa</li>
+  </ul>
+
+  <h2>MCP tools</h2>
+  <ul>
+    <li><code>get_menu(category?)</code></li>
+    <li><code>place_order(tableId, people, items[])</code></li>
+  </ul>
+
+<script>
+const CAT = {
+  prato_principal: "Pratos principais",
+  entrada: "Entradas",
+  sobremesa: "Sobremesas",
+  bebida: "Bebidas",
+};
+const brl = (n) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+fetch("/api/menu")
+  .then((r) => r.json())
+  .then((data) => {
+    document.getElementById("desc").textContent = data.restaurant.description;
+
+    const rows = [];
+    for (const [cat, label] of Object.entries(CAT)) {
+      const items = data.items.filter((i) => i.category === cat);
+      if (!items.length) continue;
+      rows.push(`<tr><td class="cat" colspan="2">${label}</td></tr>`);
+      for (const i of items) {
+        rows.push(`<tr><td>${i.name}</td><td class="price">${brl(i.price)}</td></tr>`);
+      }
+    }
+    document.getElementById("menu").innerHTML = `<table>${rows.join("")}</table>`;
+
+    const hours = Object.entries(data.restaurant.openingHours)
+      .map(([dia, t]) => `<tr><td>${dia}</td><td class="price">${t.replace(/_/g, " ")}</td></tr>`);
+    document.getElementById("hours").innerHTML = `<table>${hours.join("")}</table>`;
+  })
+  .catch(() => {
+    document.getElementById("menu").textContent = "Não foi possível carregar o cardápio.";
+  });
+</script>
+</body>
+</html>
