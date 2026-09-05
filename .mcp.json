@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "restaurante-ai-q-fome": {
+      "command": "node",
+      "args": ["dist/src/mcp/server.js"]
+    }
+  }
+}
