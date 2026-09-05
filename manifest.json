@@ -44,8 +44,7 @@
   },
   "http": {
     "mcp": "POST /api/mcp",
-    "menu": "GET /api/menu?category=",
-    "orders": "GET /api/orders, POST /api/orders"
+    "note": "Único ponto de entrada. Não há rota que devolva os dados crus: todo acesso é pelas MCP tools."
   },
   "auth": {
     "magicWord": {

@@ -43,10 +43,11 @@ deploys durante o desenvolvimento): https://vercel.com/docs/agent-resources/verc
 ## Arquivos principais
 - `data/menu.json` — dados fictícios (cardápio, funcionários, mesas).
 - `src/types.ts` — tipos compartilhados.
-- `src/repository.ts` — carrega o JSON e expõe consultas/pedidos.
-- `src/mcp/server.ts` — servidor MCP (stdio) com as tools acima.
-- `api/menu.ts`, `api/orders.ts` — funções serverless da Vercel para consulta HTTP
-  (`GET /api/menu?category=`, `GET/POST /api/orders`).
+- `src/repository.ts` — carrega o JSON e expõe consultas/pedidos/CRUD.
+- `src/magic-word.ts` — validação da palavra mágica.
+- `src/mcp/create-server.ts` — as tools, compartilhadas pelos dois transportes.
+- `src/mcp/server.ts` — transporte stdio.
+- `api/mcp.ts` — **única** função serverless: MCP sobre HTTP.
 - `manifest.json` — manifesto da entidade para o Core Orchestrator.
 
 ## Palavra mágica (`src/magic-word.ts`)
@@ -57,6 +58,15 @@ comer aqui, e a entidade perderia a função.
 Valor vem de `MAGIC_WORD`; o padrão é `por favor`. Comparação ignora maiúsculas,
 acentos e espaços nas pontas. Como o padrão está num repo público, ele serve para
 o projeto rodar recém-clonado — protegendo algo real, defina a env var na Vercel.
+
+## Acesso só por MCP
+Não existe rota que devolva os dados do `data/menu.json` cru. As antigas
+`GET /api/menu` e `GET|POST /api/orders` foram removidas: a única função
+serverless é `api/mcp.ts`. Até a página em `public/index.html` monta o cardápio
+chamando `get_menu` por MCP, como qualquer outro cliente.
+
+Ao acrescentar funcionalidade, ela entra como tool nova em
+`src/mcp/create-server.ts` — nunca como endpoint HTTP paralelo.
 
 ## Decisões relevantes
 - Sem banco de dados: cardápio/funcionários/mesas vêm de `data/menu.json` (import
@@ -82,25 +92,27 @@ cópia, que volta ao original no próximo cold start.
   chama `get_menu` e `place_order` (total unificado por mesa confere).
 - Publicado em `github.com/GTA7-Lab/restaurante-ai-q-fome` (repo próprio, saiu do
   monorepo da cidade em 05/09/2026).
-- Projeto oficial: **`clinica21/ai-q-fome`** (`prj_RL9BKtwLG7uOJEPOLJvoMrA8BzAB`),
-  ligado a este repo e com **auto-deploy a cada push confirmado funcionando**.
-  URL: https://ai-q-fome-clinica21.vercel.app
-- **Falta desativar o Vercel Authentication** nesse projeto (Settings → Deployment
-  Protection). Request anônimo leva 302 para o SSO, então nem o Core nem `curl`
-  alcançam `/api/mcp` — e nem dá para confirmar se o build passou, porque o SSO
-  responde antes da aplicação. `update_project_deployment_protection` não resolve:
-  dá 404 mesmo passando o project id real.
-- **A env `MAGIC_WORD` está no projeto errado** (`restaurante-ai-q-fome`). Precisa
-  ser criada em `ai-q-fome`, senão a palavra mágica em produção cai no padrão.
+- **Em produção e validado**: projeto `clinica21/gta7-lab-restaurante`, ligado a
+  este repo (auto-deploy a cada push), público, com `MAGIC_WORD` configurada.
+
+  MCP: **https://gta7-lab-restaurante.vercel.app/api/mcp**
+
+  Smoke contra a produção (`npm run smoke:http -- <url>`) confirma as 5 tools,
+  `get_menu`, `place_order` (total certo) e a palavra mágica recusando tanto uma
+  palavra errada quanto o padrão `por favor` — ou seja, a env var do projeto está
+  valendo e a palavra real é só do dono.
 - O conector MCP da Vercel neste time **só cria projeto**: não lê (`list_projects`
   vazio, `get_project`/`get_deployment` 404) nem atualiza projeto existente (403 em
-  todo deploy). Por isso o caminho passou a ser Git, não `deploy_to_vercel`.
-- Projetos antigos `gta7-lab-restaurante` e `restaurante-ai-q-fome` ficaram
-  obsoletos — dá para apagar.
+  todo deploy). Por isso o deploy é por Git, não por `deploy_to_vercel` — e por isso
+  mudar configuração do projeto (env var, Deployment Protection) é sempre no painel.
+- Projetos `restaurante-ai-q-fome` e `ai-q-fome` foram tentativas do caminho antigo
+  e ficaram obsoletos — dá para apagar os dois (o `ai-q-fome` também está ligado a
+  este repo, então hoje publica em paralelo sem necessidade).
 - `vercel.json` define `outputDirectory: public`. A causa provável da falha de build
   anterior era não existir diretório de saída (as funções em `api/` a Vercel compila
   sozinha, então não há build command).
 
 ## Próxima tarefa
-Desativar o Vercel Authentication do projeto, confirmar `/api/mcp` respondendo em
-produção e registrar a entidade no Core com `endpoint` apontando para essa URL.
+Registrar a entidade no Core com `transport: "http"` e
+`endpoint: "https://gta7-lab-restaurante.vercel.app/api/mcp"`, mapeando os slots
+canônicos do Core no `argsMap` das tools.

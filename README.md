@@ -3,19 +3,20 @@
 Entidade "restaurante" da cidade digital colaborativa **GTA7 Lab**. Permite consultar
 o cardápio e registrar pedidos por mesa, com valor total unificado.
 
+Em produção: **https://gta7-lab-restaurante.vercel.app/api/mcp**
+
+## Acesso só por MCP
+
+Esta entidade **não** expõe os dados por rota HTTP comum. Não existe
+`GET /api/menu` nem `/api/orders`: a única função publicada é `POST /api/mcp`, e
+tudo — leitura, pedido, alteração de cardápio — passa pelas MCP tools. Até a
+página inicial monta o cardápio chamando `get_menu` por MCP.
+
 ## Rodando localmente
 
 ```bash
 npm install
 npm run build
-```
-
-### Consultar dados via HTTP (funções da Vercel, localmente com `vercel dev`)
-
-```bash
-GET /api/menu?category=prato_principal
-GET /api/orders
-POST /api/orders   { "tableId": "mesa-1", "people": 2, "items": [{ "itemId": "prato-principal-1", "quantity": 2 }] }
 ```
 
 ### Servidor MCP
